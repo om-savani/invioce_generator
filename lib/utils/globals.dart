@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-
 class Globals {
-  static String? name, inv_num;
+  static String? name, contact, inv_num, cmp_name, slogan, address, cmp_contact;
+  static double? totalbill;
   static File? image;
   static DateTime? date;
-  static List<Map<String, dynamic>> products = [];
+  static List<Map> products = [];
+  static List<Map> invoice = [];
 }
