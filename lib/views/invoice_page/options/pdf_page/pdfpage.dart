@@ -17,6 +17,7 @@ class PdfPage extends StatefulWidget {
 
 class _PdfPageState extends State<PdfPage> {
   Future<Uint8List> getPdf() {
+    // Initialize total bill
     Globals.totalbill = 0.0;
 
     // 1. Generate object
@@ -30,7 +31,7 @@ class _PdfPageState extends State<PdfPage> {
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.Text(
-              '${Globals.cmp_name ?? ''} ',
+              '${Globals.cmp_name ?? ''}Invoice',
               style: pw.TextStyle(
                 fontSize: 24,
                 fontWeight: pw.FontWeight.bold,
@@ -38,7 +39,6 @@ class _PdfPageState extends State<PdfPage> {
             ),
             pw.SizedBox(height: 20),
             pw.Text('Customer Name: ${Globals.name ?? ''}'),
-            pw.Text('Customer Contact: ${Globals.contact ?? ''}'),
             pw.SizedBox(height: 20),
             pw.Text(
               'Products',
@@ -68,12 +68,17 @@ class _PdfPageState extends State<PdfPage> {
               cellAlignment: pw.Alignment.centerLeft,
             ),
             pw.SizedBox(height: 20),
+
+            // Calculate and display GST
             pw.Text(
               'GST (18%): ${(Globals.totalbill! * 0.18).toStringAsFixed(2)}',
               style: pw.TextStyle(
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
+            pw.SizedBox(height: 10),
+
+            // Calculate and display total bill including GST
             pw.Text(
               'Total: ${(Globals.totalbill! * 1.18).toStringAsFixed(2)}',
               style: pw.TextStyle(
@@ -81,6 +86,7 @@ class _PdfPageState extends State<PdfPage> {
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
+            pw.SizedBox(height: 20),
             pw.Text('Thank You For Shopping!'),
           ],
         ),
@@ -98,18 +104,10 @@ class _PdfPageState extends State<PdfPage> {
         title: const Text("PDF Page"),
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).popAndPushNamed(AppRoutes.productdata);
+            Navigator.of(context).popAndPushNamed(AppRoutes.homepage);
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).popAndPushNamed(AppRoutes.homepage);
-            },
-            icon: const Icon(Icons.home),
-          ),
-        ],
       ),
       body: PdfPreview(
         pdfFileName: "INVOICE_${Globals.name?.toUpperCase()}",

@@ -22,7 +22,7 @@ class _ClientDataPageState extends State<ClientDataPage> {
         title: const Text("Client Data Page"),
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).popAndPushNamed(AppRoutes.companyData);
+            Navigator.of(context).pop();
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
