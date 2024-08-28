@@ -17,29 +17,34 @@ class PdfPage extends StatefulWidget {
 
 class _PdfPageState extends State<PdfPage> {
   Future<Uint8List> getPdf() {
-    // Initialize total bill
-    Globals.totalbill = 0.0;
-
     // 1. Generate object
     pw.Document pdf = pw.Document();
 
-    // 2. Design Page
+    // 2. Add and design Page
     pdf.addPage(
       pw.Page(
         margin: const pw.EdgeInsets.all(20),
         build: (pw.Context cnt) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
+            // Invoice Header
             pw.Text(
-              '${Globals.cmp_name ?? ''}Invoice',
+              'Invoice',
               style: pw.TextStyle(
                 fontSize: 24,
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
             pw.SizedBox(height: 20),
+
+            // Invoice Details
+            pw.Text('Invoice Number: ${Globals.inv_num ?? ''}'),
             pw.Text('Customer Name: ${Globals.name ?? ''}'),
+            pw.Text(
+                'Invoice Date: ${Globals.date != null ? DateFormat.yMd().format(Globals.date!) : ''}'),
             pw.SizedBox(height: 20),
+
+            // Product List
             pw.Text(
               'Products',
               style: pw.TextStyle(
@@ -50,18 +55,18 @@ class _PdfPageState extends State<PdfPage> {
             pw.SizedBox(height: 10),
             pw.TableHelper.fromTextArray(
               headers: ['Product Name', 'Price', 'Quantity', 'Total'],
-              data: Globals.products.map((e) {
-                final price = double.tryParse(e['price']) ?? 0;
-                final quantity = int.tryParse(e['qty']) ?? 0;
+              data: Globals.products.map((product) {
+                final price = double.tryParse(product['price']) ?? 0;
+                final quantity = int.tryParse(product['quantity']) ?? 0;
                 final total = price * quantity;
-                Globals.totalbill = Globals.totalbill! + total;
                 return [
-                  e['name'],
+                  product['name'],
                   price.toStringAsFixed(2),
                   quantity.toString(),
                   total.toStringAsFixed(2)
                 ];
               }).toList(),
+              border: pw.TableBorder.all(),
               headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
               headerDecoration:
                   const pw.BoxDecoration(color: PdfColors.grey300),
@@ -69,24 +74,7 @@ class _PdfPageState extends State<PdfPage> {
             ),
             pw.SizedBox(height: 20),
 
-            // Calculate and display GST
-            pw.Text(
-              'GST (18%): ${(Globals.totalbill! * 0.18).toStringAsFixed(2)}',
-              style: pw.TextStyle(
-                fontWeight: pw.FontWeight.bold,
-              ),
-            ),
-            pw.SizedBox(height: 10),
-
-            // Calculate and display total bill including GST
-            pw.Text(
-              'Total: ${(Globals.totalbill! * 1.18).toStringAsFixed(2)}',
-              style: pw.TextStyle(
-                fontSize: 16,
-                fontWeight: pw.FontWeight.bold,
-              ),
-            ),
-            pw.SizedBox(height: 20),
+            // Footer
             pw.Text('Thank You For Shopping!'),
           ],
         ),

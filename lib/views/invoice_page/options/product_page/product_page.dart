@@ -17,21 +17,6 @@ class _ProductPageState extends State<ProductPage> {
   List<Map> allproduct = [
     {},
   ];
-  void savedata() {
-    Globals.invoice.addAll(
-      [
-        {
-          "logo": Globals.image,
-          "cmp_name": Globals.cmp_name,
-          "cmp_contact": Globals.cmp_contact,
-          "address": Globals.address,
-          "customer_name": Globals.name,
-          "customer_contact": Globals.contact,
-          "items": List.from(Globals.products)
-        }
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +25,7 @@ class _ProductPageState extends State<ProductPage> {
       appBar: AppBar(
         title: const Text("Product Page"),
         leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () {},
           icon: const Icon(Icons.arrow_back_ios),
         ),
         actions: [
@@ -97,9 +80,6 @@ class _ProductPageState extends State<ProductPage> {
                               return null;
                             },
                             textInputAction: TextInputAction.next,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
                             decoration: InputDecoration(
                               labelText: "Product Quantity",
                               hintText: "1/2/3..",
@@ -164,7 +144,6 @@ class _ProductPageState extends State<ProductPage> {
               bool valid = formKey.currentState!.validate();
               if (valid) {
                 formKey.currentState!.save();
-                savedata();
                 SnackBar snackBar = const SnackBar(
                   content: Text("Details saved successfully... !!"),
                   backgroundColor: Colors.green,

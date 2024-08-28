@@ -25,7 +25,8 @@ class _CompanyDataPageState extends State<CompanyDataPage> {
       appBar: AppBar(
         title: const Text("Company Data Page"),
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () =>
+              Navigator.of(context).popAndPushNamed(AppRoutes.homepage),
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
@@ -181,6 +182,8 @@ class _CompanyDataPageState extends State<CompanyDataPage> {
                           bool valid = formKey.currentState!.validate();
                           if (valid) {
                             formKey.currentState!.save();
+                            Globals.invoice
+                                .map((e) => e['company'] = Globals.cmp_name);
                             SnackBar snackBar = const SnackBar(
                               content: Text("Details saved successfully... !!"),
                               backgroundColor: Colors.green,
